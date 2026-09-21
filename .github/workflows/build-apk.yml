@@ -13,7 +13,6 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-          cache: gradle
       - name: Install Android NDK
         run: |
           yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null || true
