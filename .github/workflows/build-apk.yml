@@ -13,6 +13,7 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
+          cache: gradle
       - name: Install Android NDK
         run: |
           yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null || true
@@ -21,6 +22,7 @@ jobs:
         run: git clone --depth 1 https://github.com/ggml-org/llama.cpp.git engine
       - name: Apply Aurora overlay
         run: |
+          find engine/examples/llama.android/app/src/main/res -name activity_main.xml -delete
           unzip -o aurora-overlay.zip -d overlay
           cp -R overlay/app/. engine/examples/llama.android/app/
       - name: Build arm64 debug APK
