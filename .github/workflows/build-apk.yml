@@ -26,9 +26,19 @@ jobs:
       - name: Build arm64 debug APK
         working-directory: engine/examples/llama.android
         run: |
+          set -o pipefail
           chmod +x gradlew
-          ./gradlew :app:assembleDebug --no-daemon
-      - uses: actions/upload-artifact@v4
+          ./gradlew :app:assembleDebug --no-daemon 2>&1 | tee ../../../aurora-build.log
+      - name: Upload compiler report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Aurora-Build-Report
+          path: aurora-build.log
+          retention-days: 3
+      - name: Upload APK
+        if: success()
+        uses: actions/upload-artifact@v4
         with:
           name: Aurora-Brain-APK
           path: engine/examples/llama.android/app/build/outputs/apk/debug/*.apk
